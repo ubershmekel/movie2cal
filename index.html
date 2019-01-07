@@ -12,6 +12,7 @@
     <script src="assets/add-to-calendar.js"></script>
     <script src="assets/index.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/index.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   </head>
   <body>
     <h1><a href="." class="title-link">Movie2cal - Add a movie release date to your calendar</a></h1>
@@ -27,8 +28,8 @@
         <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)">
         <div v-else class="no-poster"></div>
 
-        <div>{{ movie.title }}</div>
-        <div class="date">{{ movie.release_date }}</div>
+        <div class="movie-title" :title="movie.overview"><a :href="'https://www.themoviedb.org/movie/' + movie.id">{{ movie.title }}</a></div>
+        <div class="movie-date">{{ movie.release_date }}</div>
         
         <div class="all-calendar-links">
           <div v-for="(link, name) in movie.calendarLinks" v-html="link" class="cal-link-div"></div>

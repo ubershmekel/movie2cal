@@ -4,6 +4,7 @@
 
 body {
   font-family: 'Roboto',arial,sans-serif;
+  text-align: center;
 }
 
 h1 {
@@ -105,4 +106,13 @@ footer a {
   margin: 8px;
   padding: 4px;
   display: table;
+  margin: 1em auto;
+}
+
+.movie-title {
+  padding: 0.2em;
+}
+
+.movie-date {
+  padding: 0.2em;
 }
