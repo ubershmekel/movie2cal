@@ -12,10 +12,15 @@
     <link rel="stylesheet" type="text/css" href="assets/index.css">
   </head>
   <body>
-    <h1>Movie2cal - Add a movie release date to your calendar</h1>
+    <a href="."><h1>Movie2cal - Add a movie release date to your calendar</h1></a>
     
     <div id="app">
+      <form method="GET">
+        <input name="q" v-model="search" class="search-ui"><button type="submit" class="search-ui">🔍</button>
+      </form>
+
       {{ message }}
+
       <div v-for="movie in movies" class="movie-container">
         
         <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)">

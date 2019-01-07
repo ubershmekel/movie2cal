@@ -9,6 +9,7 @@
     future: '/discover/movie?primary_release_date.gte=' + (new Date()).toISOString().substring(0, 10),
     configuration: '/configuration',
     upcoming: '/movie/upcoming',
+    search: '/search/movie',
     
     // can or should be loaded from configuration end point
     imageBaseUrl: '',
@@ -38,6 +39,21 @@
     } else {
       return tmdb.base + subUrl + '?' + tmdb.key;
     }
+  }
+
+  function getParams() {
+    var urlParams = {};
+    var match;
+    var pl     = /\+/g;  // Regex for replacing addition symbol with a space
+    var search = /([^&=]+)=?([^&]*)/g;
+    var decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); };
+    var query  = window.location.search.substring(1);
+
+    urlParams = {};
+    while (match = search.exec(query)) {
+      urlParams[decode(match[1])] = decode(match[2]);
+    }
+    return urlParams;
   }
 
   function getData(subUrl) {
@@ -82,9 +98,9 @@
       var nameA = a.release_date.toLowerCase();
       var nameB = b.release_date.toLowerCase()
       if (nameA < nameB) //sort string ascending
-        return -1 
+        return 1;
       if (nameA > nameB)
-        return 1
+        return -1;
       return 0;
     });
   }
@@ -92,60 +108,83 @@
   function processMovies(movies) {
     for (var i = 0; i < movies.length; i++) {
       var movie = movies[i];
-      var releaseDate = new Date(movie.release_date);
       //var calendarLinks = addToCalendar.generateCalendars({data: {title:movie.title, start: releaseDate, allday: true}});
-      var eventInfo = {
-        title:movie.title,
-        start: releaseDate,
-        description: "Movie release date",
-        allday: true,
-      };
-      var calendarLinks = addToCalendar({data:eventInfo});
-      movie.calendarLinks = calendarLinks.innerHTML;
+      if (movie.release_date) {
+        var releaseDate = new Date(movie.release_date);
+        var eventInfo = {
+          title:movie.title,
+          start: releaseDate,
+          description: "Movie release date",
+          allday: true,
+        };
+        var calendarLinks = addToCalendar({data:eventInfo});
+        movie.calendarLinks = calendarLinks.innerHTML;
+      }
     }
-    return movies;
+    app.movies = app.movies.concat(movies);
+    // sorting out here because the pagination sorting doesn't seem to work.
+    app.movies = sortByReleaseDate(app.movies);
+    if (app.movies.length == 0) {
+      app.message = "No movies found :(";
+    } else {
+      app.message = "";
+    }
   }
 
-  function main(event) {
+  function getNewReleases() {
+    var showMoviesUrl = tmdb.future;
+    // Example: https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=d53664a6df0a653bf72589aa5275e342
+    getData(showMoviesUrl).then(data => {
+      processMovies(data.results);
+    })
+    .then(() => {
+      getData(showMoviesUrl + '&page=2')
+      .then(data => {
+        processMovies(data.results);
+      });
+    });
+  }
+
+  function initTmdb() {
+    return getData(tmdb.configuration).then(configData => {
+      tmdb.imageBaseUrl = configData.images.secure_base_url; // "https://image.tmdb.org/t/p/"
+      // still sizes = 0: "w92" 1: "w185" 2: "w300" 3: "original"
+    })
+  }
+
+  function getSearchResults(query) {
+    app.search = query;
+    console.log("searching for", query);
+    getData(tmdb.search + '?query=' + query)
+    .then(data => {
+      processMovies(data.results);
+    });
+  }
+
+  function initVueApp() {
     app = new Vue({
       el: '#app',
       data: {
         message: 'Loading movies',
         movies: [],
+        search: "",
       },
       methods: {
         tmdbImageUrl: tmdbImageUrl,
       },
     });
-    
-    getData(tmdb.configuration).then(configData => {
-      //console.log("data");
-      //console.log(data);
+  }
 
-      tmdb.imageBaseUrl = configData.images.secure_base_url; // "https://image.tmdb.org/t/p/"
+  function main(event) {
+    initVueApp();
 
-
-      // still sizes = 0: "w92" 1: "w185" 2: "w300" 3: "original"
-    }).then(_ => {
-      var showMoviesUrl = tmdb.future;
-      // Example: https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=d53664a6df0a653bf72589aa5275e342
-      getData(showMoviesUrl).then(data => {
-        var movies = processMovies(data.results);
-        app.movies = movies;
-        // sorting out here because the pagination sorting doesn't seem to work.
-        app.movies = sortByReleaseDate(app.movies);
-        app.message = "";
-      })
-      .then(_ => {
-        getData(showMoviesUrl + '&page=2')
-        .then(data => {
-          var movies = processMovies(data.results);
-          app.movies = app.movies.concat(movies);
-          app.movies = sortByReleaseDate(app.movies);
-          app.message = "";
-        });
-      })
-      ;
+    initTmdb().then(() => {
+      var params = getParams();
+      if (params.q && params.q.length > 0) {
+        getSearchResults(params.q);
+      } else {
+        getNewReleases();
+      }
     });
   };
 

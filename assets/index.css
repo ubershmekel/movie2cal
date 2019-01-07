@@ -40,3 +40,11 @@ h1 {
   background-color: #ddd;
 }
 
+.search-ui {
+  line-height: 1.5em;
+}
+
+label.add-to-calendar-label {
+  box-shadow: 2px 2px #aaa !important;
+  background-color: #e4e4e4;
+}
