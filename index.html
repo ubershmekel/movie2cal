@@ -2,6 +2,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Movie2cal - Add to calendar a movie premiere</title>
+    <meta name="description" content="Add a movie's release date to your calendar."/>
+
 
     <!-- show banner for errors -->
     <script type="text/javascript">var showJsErrorsMessage="Unexpected error :( ";function showAlert(e){if(document.body){var n,o="snackAlertsContainer";if(!(n=document.getElementById(o)))(n=document.createElement("div")).id=o,document.body.appendChild(n);var r=document.createElement("div");r.innerHTML=e,r.className="snackAlert show",r.onmouseenter=function(){t&&(clearTimeout(t),t=0)},r.onmouseleave=function(){s()};var t=0;s(),n.appendChild(r)}else setTimeout(function(){showAlert(e)},200);function s(){t||(t=setTimeout(function(){r.className=r.className.replace("show","hiding"),setTimeout(function(){r.parentNode.removeChild(r)},1e3)},3e3))}}window.onerror=function(e,n,o){return showAlert(showJsErrorsMessage+e),!1},window.addEventListener("unhandledrejection",function(e){showAlert(showJsErrorsMessage+" Broken promise - "+e.reason)})</script><style type="text/css">#snackAlertsContainer{position:fixed;z-index:1;bottom:0;right:0;width:0}.snackAlert{display:none;margin:auto;position:relative;right:54vw;width:50vw;bottom:20px;margin-bottom:16px;background-color:#933;color:#fff;text-align:center;border-radius:2px;padding:16px;opacity:1;-webkit-transition:opacity 1s ease-in-out;-moz-transition:opacity 1s ease-in-out;-ms-transition:opacity 1s ease-in-out;-o-transition:opacity 1s ease-in-out;transition:opacity 1s ease-in-out}.snackAlert.hiding{display:block;opacity:0}.snackAlert.show{display:block;opacity:1;-webkit-animation:fadein 1.5s;animation:fadein 1.5s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:20px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:20px;opacity:1}}</style>
@@ -12,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="assets/index.css">
   </head>
   <body>
-    <a href="."><h1>Movie2cal - Add a movie release date to your calendar</h1></a>
+    <h1><a href="." class="title-link">Movie2cal - Add a movie release date to your calendar</a></h1>
     
     <div id="app">
       <form method="GET">
@@ -22,30 +24,25 @@
       {{ message }}
 
       <div v-for="movie in movies" class="movie-container">
+        <div v-html="movie.calendarLinks" class="calendar-button"></div>
         
         <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)">
         <div v-else class="no-poster"></div>
 
         <div>{{ movie.title }}</div>
         <div class="date">{{ movie.release_date }}</div>
-        <div v-html="movie.calendarLinks" class="calendar-button"></div>
-
-        <!--
-                    { { movie.calendarLinks } }
-          <ul id="v-for-object" class="demo">
-          div v-for="(link, name) in movie.calendarLinks" v-html="link">
-          </div
-        </ul>-->
           
       </div>
     </div>
 
     <footer>
       <h2>Credits</h2>
-      <p>This product uses the TMDb API but is not endorsed or certified by TMDb.</p>
-      <a href="https://www.themoviedb.org/documentation/api"><img class="footer-logo" src="assets/themoviedb-logo.svg"></a>
-      <a href="https://github.com/ubershmekel/movie2cal"><img class="footer-logo" src="assets/github-logo.svg"></a>
-      <p>https://github.com/commonpike/add-to-calendar-buttons</p>
+      <ul>
+        <li><a href="https://www.themoviedb.org/documentation/api"><img class="footer-logo" src="assets/themoviedb-logo.svg"></a> This product uses the TMDb API but is not endorsed or certified by TMDb.</li>
+        <li><a href="https://github.com/ubershmekel/movie2cal"><img class="footer-logo" src="assets/github-logo.svg"> source on github.</a></li>
+        <li><a href="https://github.com/commonpike/add-to-calendar-buttons">add-to-calendar-buttons</a></li>
+        <li><a href="https://github.com/vuejs/vue/">Vue.js</a></li>
+      </ul>
     </footer>
 
     <!-- Google Analytics -->
