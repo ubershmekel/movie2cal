@@ -24,25 +24,23 @@
       {{ message }}
 
       <div v-for="movie in movies" class="movie-container">
-        <div v-html="movie.calendarLinks" class="calendar-button"></div>
-        
         <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)">
         <div v-else class="no-poster"></div>
 
         <div>{{ movie.title }}</div>
         <div class="date">{{ movie.release_date }}</div>
           
+        <div v-html="movie.calendarLinks" class="calendar-button"></div>
+
       </div>
     </div>
 
     <footer>
       <h2>Credits</h2>
-      <ul>
-        <li><a href="https://www.themoviedb.org/documentation/api"><img class="footer-logo" src="assets/themoviedb-logo.svg"></a> This product uses the TMDb API but is not endorsed or certified by TMDb.</li>
-        <li><a href="https://github.com/ubershmekel/movie2cal"><img class="footer-logo" src="assets/github-logo.svg"> source on github.</a></li>
-        <li><a href="https://github.com/commonpike/add-to-calendar-buttons">add-to-calendar-buttons</a></li>
-        <li><a href="https://github.com/vuejs/vue/">Vue.js</a></li>
-      </ul>
+      <a href="https://www.themoviedb.org/documentation/api"><img class="footer-logo" src="assets/themoviedb-logo.svg"> This product uses the TMDb API but is not endorsed or certified by TMDb.</a>
+      <a href="https://github.com/ubershmekel/movie2cal"><img class="footer-logo" src="assets/github-logo.svg"> source on github.</a>
+      <a href="https://github.com/commonpike/add-to-calendar-buttons">add-to-calendar-buttons</a>
+      <a href="https://github.com/vuejs/vue/">Vue.js</a>
     </footer>
 
     <!-- Google Analytics -->
