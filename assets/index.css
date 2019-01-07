@@ -1,0 +1,21 @@
+.footer-logo {
+  width: 80px;
+}
+
+
+h1 {
+  font-size: 200%;
+
+}
+
+
+.movie-container {
+  border: 1px solid #000;
+  margin: 5px;
+  display: inline-block;
+  width: 185px;
+}
+
+.calendar-button {
+  position: relative; /* So the calendar buttons stay here and don't go to the top left of the page.*/
+}
