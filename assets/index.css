@@ -20,15 +20,17 @@ a:hover {
 }
 
 .movie-container {
-  border: 1px solid #ccc;
   margin: 5px;
   display: inline-block;
   width: 185px;
   box-shadow: 2px 2px 15px #888;
   border-radius: 5px;
-  padding: 5px;
   text-align: center;
   vertical-align: top;
+}
+
+.movie-container img {
+  border-radius: 5px;
 }
 
 .movie-container:hover {
@@ -39,9 +41,13 @@ a:hover {
   position: relative; /* So the calendar links stay here and don't go to the top left of the page.*/
 }
 
-.add-to-calendar-dropdown {
+div.add-to-calendar-dropdown {
   /* because 16px was causing the bottom link to wrap */
   font-size: 15px;
+
+  /* Fill up width of card with calendar links. */
+  padding: 0;
+  width: 100%;
 }
 
 label.add-to-calendar-label {
@@ -58,6 +64,7 @@ label.add-to-calendar-label:hover {
 
 .calendar-button a {
   text-align: left;
+  padding: 1em;
 }
 
 .no-poster {
