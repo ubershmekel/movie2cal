@@ -6,7 +6,9 @@
     key: 'api_key=d53664a6df0a653bf72589aa5275e342',
     base: 'https://api.themoviedb.org/3', // /movie/550?';
     pop: '/discover/movie?sort_by=popularity.desc',
+    future: '/discover/movie?primary_release_date.gte=' + (new Date()).toISOString().substring(0, 10),
     configuration: '/configuration',
+    upcoming: '/movie/upcoming',
     
     // can or should be loaded from configuration end point
     imageBaseUrl: '',
@@ -73,7 +75,36 @@
     // "poster_path": "/5Kg76ldv7VxeX9YlcQXiowHgdX6.jpg",
     // End goal: https://image.tmdb.org/t/p/w500/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg
     return tmdb.imageBaseUrl + tmdb.imageSize + path;
-  } 
+  }
+
+  function sortByReleaseDate(data) {
+    return data.sort(function(a, b){
+      var nameA = a.release_date.toLowerCase();
+      var nameB = b.release_date.toLowerCase()
+      if (nameA < nameB) //sort string ascending
+        return -1 
+      if (nameA > nameB)
+        return 1
+      return 0;
+    });
+  }
+
+  function processMovies(movies) {
+    for (var i = 0; i < movies.length; i++) {
+      var movie = movies[i];
+      var releaseDate = new Date(movie.release_date);
+      //var calendarLinks = addToCalendar.generateCalendars({data: {title:movie.title, start: releaseDate, allday: true}});
+      var eventInfo = {
+        title:movie.title,
+        start: releaseDate,
+        description: "Movie release date",
+        allday: true,
+      };
+      var calendarLinks = addToCalendar({data:eventInfo});
+      movie.calendarLinks = calendarLinks.innerHTML;
+    }
+    return movies;
+  }
 
   function main(event) {
     app = new Vue({
@@ -96,24 +127,25 @@
 
       // still sizes = 0: "w92" 1: "w185" 2: "w300" 3: "original"
     }).then(_ => {
+      var showMoviesUrl = tmdb.future;
       // Example: https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=d53664a6df0a653bf72589aa5275e342
-      getData(tmdb.pop).then(data => {
-        for (var i = 0; i < data.results.length; i++) {
-          var movie = data.results[i];
-          var releaseDate = new Date(movie.release_date);
-          //var calendarLinks = addToCalendar.generateCalendars({data: {title:movie.title, start: releaseDate, allday: true}});
-          var eventInfo = {
-            title:movie.title,
-            start: releaseDate,
-            location: "Movie premiere",
-            allday: true,
-          };
-          var calendarLinks = addToCalendar({data:eventInfo});
-          movie.calendarLinks = calendarLinks.innerHTML;
-        }
-        app.movies = data.results;
+      getData(showMoviesUrl).then(data => {
+        var movies = processMovies(data.results);
+        app.movies = movies;
+        // sorting out here because the pagination sorting doesn't seem to work.
+        app.movies = sortByReleaseDate(app.movies);
         app.message = "";
-      });
+      })
+      .then(_ => {
+        getData(showMoviesUrl + '&page=2')
+        .then(data => {
+          var movies = processMovies(data.results);
+          app.movies = app.movies.concat(movies);
+          app.movies = sortByReleaseDate(app.movies);
+          app.message = "";
+        });
+      })
+      ;
     });
   };
 

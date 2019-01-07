@@ -12,13 +12,16 @@
     <link rel="stylesheet" type="text/css" href="assets/index.css">
   </head>
   <body>
-    <h1>Movie2cal - Add a movie premiere to your calendar</h1>
+    <h1>Movie2cal - Add a movie release date to your calendar</h1>
     
     <div id="app">
       {{ message }}
       <div v-for="movie in movies" class="movie-container">
+        
+        <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)">
+        <div v-else class="no-poster"></div>
+
         <div>{{ movie.title }}</div>
-        <img :src="tmdbImageUrl(movie.poster_path)">
         <div class="date">{{ movie.release_date }}</div>
         <div v-html="movie.calendarLinks" class="calendar-button"></div>
 
@@ -35,8 +38,8 @@
     <footer>
       <h2>Credits</h2>
       <p>This product uses the TMDb API but is not endorsed or certified by TMDb.</p>
-      <img class="footer-logo" src="assets/themoviedb-logo.svg">
-      <img class="footer-logo" src="assets/github-logo.svg">
+      <a href="https://www.themoviedb.org/documentation/api"><img class="footer-logo" src="assets/themoviedb-logo.svg"></a>
+      <a href="https://github.com/ubershmekel/movie2cal"><img class="footer-logo" src="assets/github-logo.svg"></a>
       <p>https://github.com/commonpike/add-to-calendar-buttons</p>
     </footer>
 

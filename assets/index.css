@@ -14,12 +14,29 @@ h1 {
   margin: 5px;
   display: inline-block;
   width: 185px;
-  box-shadow: 2px 2px 15px grey;
+  box-shadow: 2px 2px 15px #888;
   border-radius: 5px;
   padding: 5px;
   text-align: center;
+  vertical-align: top;
+}
+
+.movie-container:hover {
+  box-shadow: 2px 2px 15px #222;
 }
 
 .calendar-button {
-  position: relative; /* So the calendar buttons stay here and don't go to the top left of the page.*/
+  position: relative; /* So the calendar links stay here and don't go to the top left of the page.*/
 }
+
+.calendar-button a {
+  text-align: left;
+}
+
+.no-poster {
+  width: 185px;
+  height: 278px;
+  /* height: 220px; */
+  background-color: #ddd;
+}
+
