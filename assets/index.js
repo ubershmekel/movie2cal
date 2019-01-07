@@ -108,7 +108,6 @@
   function processMovies(movies) {
     for (var i = 0; i < movies.length; i++) {
       var movie = movies[i];
-      //var calendarLinks = addToCalendar.generateCalendars({data: {title:movie.title, start: releaseDate, allday: true}});
       if (movie.release_date) {
         var releaseDate = new Date(movie.release_date);
         var eventInfo = {
@@ -117,8 +116,8 @@
           description: "Movie release date",
           allday: true,
         };
-        var calendarLinks = addToCalendar({data:eventInfo});
-        movie.calendarLinks = calendarLinks.innerHTML;
+        //movie.calendarLinks = addToCalendar({data:eventInfo}).innerHTML;
+        movie.calendarLinks = addToCalendar.generateCalendars({data: eventInfo});
       }
     }
     app.movies = app.movies.concat(movies);

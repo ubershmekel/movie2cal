@@ -27,6 +27,7 @@ a:hover {
   border-radius: 5px;
   text-align: center;
   vertical-align: top;
+  position: relative;
 }
 
 .movie-container img {
@@ -62,8 +63,28 @@ label.add-to-calendar-label:hover {
   background-color: #ddd;
 }
 
-.calendar-button a {
+.all-calendar-links {
   text-align: left;
+  position: absolute;
+  top: 0;
+  background: rgba(255, 255, 255, 0.9);
+  width: 0;
+
+  max-height: 0;
+  overflow: hidden;
+  /* Animating width and height to reduce a wonky bug that touch on mobile causes a click on the invisible menu */
+  transition: max-height 1s, width 1s;
+  -webkit-transition: max-height 1s, width 1s;
+  white-space:nowrap;
+}
+
+.movie-container:hover .all-calendar-links {
+  max-height: 100%;
+  width: 100%;
+}
+
+.cal-link-div {
+  font-size: 15px;
   padding: 1em;
 }
 
