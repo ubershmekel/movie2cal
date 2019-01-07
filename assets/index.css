@@ -9,6 +9,12 @@ body {
 
 h1 {
   font-size: 200%;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 110%;
+  margin-bottom: 1em;
 }
 
 a {
@@ -114,5 +120,6 @@ footer a {
 }
 
 .movie-date {
-  padding: 0.2em;
+  padding-bottom: 0.2em;
 }
+
