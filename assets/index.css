@@ -10,10 +10,14 @@ h1 {
 
 
 .movie-container {
-  border: 1px solid #000;
+  border: 1px solid #ccc;
   margin: 5px;
   display: inline-block;
   width: 185px;
+  box-shadow: 2px 2px 15px grey;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
 }
 
 .calendar-button {
