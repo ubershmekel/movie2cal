@@ -113,7 +113,7 @@
         var eventInfo = {
           title:movie.title,
           start: releaseDate,
-          description: "Movie release date",
+          description: "Movie release date made using https://ubershmekel.github.io/movie2cal/",
           allday: true,
         };
         //movie.calendarLinks = addToCalendar({data:eventInfo}).innerHTML;
