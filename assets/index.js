@@ -1,4 +1,4 @@
-;(function(exports) {
+; (function (exports) {
   //var data = addToCalendar.generateCalendars({title:"this is the title of my event", start: new Date(), duration: 90});
   //console.log(data);
 
@@ -10,28 +10,13 @@
     configuration: '/configuration',
     upcoming: '/movie/upcoming',
     search: '/search/movie',
-    
+
     // can or should be loaded from configuration end point
     imageBaseUrl: '',
     imageSize: 'w185',
-  }
+  };
 
   var app;
-
-  function getJSON(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'json';
-    xhr.onload = function() {
-      var status = xhr.status;
-      if (status === 200) {
-        callback(null, xhr.response);
-      } else {
-        callback(status, xhr.response);
-      }
-    };
-    xhr.send();
-  };
 
   function tmdbUrl(subUrl) {
     if (subUrl.indexOf('?') >= 0) {
@@ -44,10 +29,10 @@
   function getParams() {
     var urlParams = {};
     var match;
-    var pl     = /\+/g;  // Regex for replacing addition symbol with a space
+    var pl = /\+/g;  // Regex for replacing addition symbol with a space
     var search = /([^&=]+)=?([^&]*)/g;
     var decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); };
-    var query  = window.location.search.substring(1);
+    var query = window.location.search.substring(1);
 
     urlParams = {};
     while (match = search.exec(query)) {
@@ -57,7 +42,7 @@
   }
 
   function getData(subUrl) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       var url = tmdbUrl(subUrl);
       fetch(url).then(response => {
         response.json().then(data => {
@@ -74,7 +59,7 @@
       //  console.log("Done with fetch", res.status, res.data.title);
       //}));
     });
-  
+
     /*getJSON(url,
       function(err, data) {
         if (err !== null) {
@@ -94,9 +79,9 @@
   }
 
   function sortByReleaseDate(data) {
-    return data.sort(function(a, b){
+    return data.sort(function (a, b) {
       var nameA = a.release_date.toLowerCase();
-      var nameB = b.release_date.toLowerCase()
+      var nameB = b.release_date.toLowerCase();
       if (nameA < nameB) //sort string ascending
         return 1;
       if (nameA > nameB)
@@ -111,13 +96,13 @@
       if (movie.release_date) {
         var releaseDate = new Date(movie.release_date);
         var eventInfo = {
-          title:movie.title,
+          title: movie.title,
           start: releaseDate,
           description: "Movie release date made using https://ubershmekel.github.io/movie2cal/",
           allday: true,
         };
         //movie.calendarLinks = addToCalendar({data:eventInfo}).innerHTML;
-        movie.calendarLinks = addToCalendar.generateCalendars({data: eventInfo});
+        movie.calendarLinks = addToCalendar.generateCalendars({ data: eventInfo });
       }
     }
     app.movies = app.movies.concat(movies);
@@ -130,34 +115,41 @@
     }
   }
 
-  function getNewReleases() {
-    var showMoviesUrl = tmdb.future;
+  function getNewReleases(region) {
+    var showMoviesUrl = tmdb.future + '&region=' + region;
     // Example: https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=d53664a6df0a653bf72589aa5275e342
     getData(showMoviesUrl).then(data => {
       processMovies(data.results);
     })
-    .then(() => {
-      getData(showMoviesUrl + '&page=2')
-      .then(data => {
-        processMovies(data.results);
+      .then(() => {
+        getData(showMoviesUrl + '&page=2')
+          .then(data => {
+            processMovies(data.results);
+          });
       });
-    });
   }
 
   function initTmdb() {
     return getData(tmdb.configuration).then(configData => {
       tmdb.imageBaseUrl = configData.images.secure_base_url; // "https://image.tmdb.org/t/p/"
       // still sizes = 0: "w92" 1: "w185" 2: "w300" 3: "original"
-    })
+    });
   }
 
-  function getSearchResults(query) {
-    app.search = query;
+  function getSearchResults(region, query) {
     console.log("searching for", query);
-    getData(tmdb.search + '?query=' + query)
-    .then(data => {
-      processMovies(data.results);
-    });
+    getData(tmdb.search + '?query=' + query + '&region=' + region)
+      .then(data => {
+        processMovies(data.results);
+      });
+  }
+
+  const regionCodeList = [];
+  for (let i = 0; i < 26; i++) {
+    for (let j = 0; j < 26; j++) {
+      const regionCode = String.fromCharCode(97 + i) + String.fromCharCode(97 + j);
+      regionCodeList.push(regionCode);
+    }
   }
 
   function initVueApp() {
@@ -167,6 +159,8 @@
         message: 'Loading movies',
         movies: [],
         search: "",
+        region: "us",
+        regionCodeList: regionCodeList,
       },
       methods: {
         tmdbImageUrl: tmdbImageUrl,
@@ -179,10 +173,23 @@
 
     initTmdb().then(() => {
       var params = getParams();
+      let region = 'us';
+      let query = '';
+      if (params.region && params.region.length == 2) {
+        region = params.region;
+      }
       if (params.q && params.q.length > 0) {
-        getSearchResults(params.q);
+        query = params.q;
+      }
+
+      // Set the form fields to match the get query
+      app.search = query;
+      app.region = region;
+
+      if (query.length > 0) {
+        getSearchResults(region, query);
       } else {
-        getNewReleases();
+        getNewReleases(region);
       }
     });
   };

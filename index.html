@@ -1,68 +1,119 @@
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Movie2cal - Add a movie's release date to your calendar</title>
-    <meta name="description" content="Add a movie's release date to your calendar."/>
-    <meta name="viewport" content="width=500">
-    <meta property="og:image" content="http://ubershmekel.github.io/movie2cal/assets/film-cal.png">
-    <meta property="og:image:secure_url" content="https://ubershmekel.github.io/movie2cal/assets/film-cal.png">
-    <meta name="twitter:image" content="http://ubershmekel.github.io/movie2cal/assets/film-cal.png">
-    <link rel="shortcut icon" type="image/png" href="assets/film-cal.png"/>
+    <meta
+      name="description"
+      content="Add a movie's release date to your calendar."
+    />
+    <meta name="viewport" content="width=500" />
+    <meta
+      property="og:image"
+      content="http://ubershmekel.github.io/movie2cal/assets/film-cal.png"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://ubershmekel.github.io/movie2cal/assets/film-cal.png"
+    />
+    <meta
+      name="twitter:image"
+      content="http://ubershmekel.github.io/movie2cal/assets/film-cal.png"
+    />
+    <link rel="shortcut icon" type="image/png" href="assets/film-cal.png" />
 
     <!-- show banner for errors -->
-    <script type="text/javascript">var showJsErrorsMessage="Unexpected error :( ";function showAlert(e){if(document.body){var n,o="snackAlertsContainer";if(!(n=document.getElementById(o)))(n=document.createElement("div")).id=o,document.body.appendChild(n);var r=document.createElement("div");r.innerHTML=e,r.className="snackAlert show",r.onmouseenter=function(){t&&(clearTimeout(t),t=0)},r.onmouseleave=function(){s()};var t=0;s(),n.appendChild(r)}else setTimeout(function(){showAlert(e)},200);function s(){t||(t=setTimeout(function(){r.className=r.className.replace("show","hiding"),setTimeout(function(){r.parentNode.removeChild(r)},1e3)},3e3))}}window.onerror=function(e,n,o){return showAlert(showJsErrorsMessage+e),!1},window.addEventListener("unhandledrejection",function(e){showAlert(showJsErrorsMessage+" Broken promise - "+e.reason)})</script><style type="text/css">#snackAlertsContainer{position:fixed;z-index:1;bottom:0;right:0;width:0}.snackAlert{display:none;margin:auto;position:relative;right:54vw;width:50vw;bottom:20px;margin-bottom:16px;background-color:#933;color:#fff;text-align:center;border-radius:2px;padding:16px;opacity:1;-webkit-transition:opacity 1s ease-in-out;-moz-transition:opacity 1s ease-in-out;-ms-transition:opacity 1s ease-in-out;-o-transition:opacity 1s ease-in-out;transition:opacity 1s ease-in-out}.snackAlert.hiding{display:block;opacity:0}.snackAlert.show{display:block;opacity:1;-webkit-animation:fadein 1.5s;animation:fadein 1.5s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:20px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:20px;opacity:1}}</style>
-    
+    <!-- prettier-ignore -->
+    <script type="text/javascript">var showJsErrorsMessage="Unexpected error :( ";function showAlert(e){if(document.body){var n,o="snackAlertsContainer";if(!(n=document.getElementById(o)))(n=document.createElement("div")).id=o,document.body.appendChild(n);var r=document.createElement("div");r.innerHTML=e,r.className="snackAlert show",r.onmouseenter=function(){t&&(clearTimeout(t),t=0)},r.onmouseleave=function(){s()};var t=0;s(),n.appendChild(r)}else setTimeout(function(){showAlert(e)},200);function s(){t||(t=setTimeout(function(){r.className=r.className.replace("show","hiding"),setTimeout(function(){r.parentNode.removeChild(r)},1e3)},3e3))}}window.onerror=function(e,n,o){return showAlert(showJsErrorsMessage+e),!1},window.addEventListener("unhandledrejection",function(e){showAlert(showJsErrorsMessage+" Broken promise - "+e.reason)})</script>
+    <!-- prettier-ignore -->
+    <style type="text/css">#snackAlertsContainer{position:fixed;z-index:1;bottom:0;right:0;width:0}.snackAlert{display:none;margin:auto;position:relative;right:54vw;width:50vw;bottom:20px;margin-bottom:16px;background-color:#933;color:#fff;text-align:center;border-radius:2px;padding:16px;opacity:1;-webkit-transition:opacity 1s ease-in-out;-moz-transition:opacity 1s ease-in-out;-ms-transition:opacity 1s ease-in-out;-o-transition:opacity 1s ease-in-out;transition:opacity 1s ease-in-out}.snackAlert.hiding{display:block;opacity:0}.snackAlert.show{display:block;opacity:1;-webkit-animation:fadein 1.5s;animation:fadein 1.5s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:20px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:20px;opacity:1}}</style>
+
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="assets/add-to-calendar.js"></script>
     <script src="assets/index.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets/index.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/index.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
   </head>
+
   <body>
     <h1><a href="." class="title-link">movie2cal</a></h1>
     <div class="subtitle">add a movie release date to your calendar</div>
-    
+
     <div id="app">
       <form method="GET">
-        <input name="q" v-model="search" class="search-ui"><button type="submit" class="search-ui">🔍</button>
+        <input name="q" v-model="search" class="search-ui" /><button
+          type="submit"
+          class="search-ui"
+        >
+          🔍
+        </button>
+        <select name="region" v-model="region">
+          <option v-for="region in regionCodeList" :value="region">
+            {{ region }}
+          </option>
+        </select>
       </form>
 
       {{ message }}
 
       <div v-for="movie in movies" class="movie-container">
-        <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)">
+        <img v-if="movie.poster_path" :src="tmdbImageUrl(movie.poster_path)" />
         <div v-else class="no-poster"></div>
 
-        <div class="movie-title" :title="movie.overview"><a :href="'https://www.themoviedb.org/movie/' + movie.id">{{ movie.title }}</a></div>
+        <div class="movie-title" :title="movie.overview">
+          <a :href="'https://www.themoviedb.org/movie/' + movie.id"
+            >{{ movie.title }}</a
+          >
+        </div>
         <div class="movie-date">{{ movie.release_date }}</div>
-        
+
         <div class="all-calendar-links">
-          <div v-for="(link, name) in movie.calendarLinks" v-html="link" class="cal-link-div"></div>
+          <div
+            v-for="(link, name) in movie.calendarLinks"
+            v-html="link"
+            class="cal-link-div"
+          ></div>
         </div>
 
         <!--div v-html="movie.calendarLinks" class="calendar-button"></div-->
-
       </div>
     </div>
 
     <footer>
       <h2>Credits</h2>
-      <a href="https://www.themoviedb.org/documentation/api"><img class="footer-logo" src="assets/themoviedb-logo.svg"> This product uses the TMDb API but is not endorsed or certified by TMDb.</a>
-      <a href="https://github.com/ubershmekel/movie2cal"><img class="footer-logo" src="assets/github-logo.svg"> source on github.</a>
-      <a href="https://github.com/commonpike/add-to-calendar-buttons">add-to-calendar-buttons</a>
+      <a href="https://www.themoviedb.org/documentation/api"
+        ><img class="footer-logo" src="assets/themoviedb-logo.svg" /> This
+        product uses the TMDb API but is not endorsed or certified by TMDb.</a
+      >
+      <a href="https://github.com/ubershmekel/movie2cal"
+        ><img class="footer-logo" src="assets/github-logo.svg" /> source on
+        github.</a
+      >
+      <a href="https://github.com/commonpike/add-to-calendar-buttons"
+        >add-to-calendar-buttons</a
+      >
       <a href="https://github.com/vuejs/vue/">Vue.js</a>
     </footer>
 
     <!-- Google Analytics -->
     <script type="text/javascript">
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      var gaJsHost =
+        "https:" == document.location.protocol ? "https://ssl." : "http://www.";
+      document.write(
+        unescape(
+          "%3Cscript src='" +
+            gaJsHost +
+            "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"
+        )
+      );
     </script>
     <script type="text/javascript">
       try {
         var pageTracker = _gat._getTracker("UA-4533496-22");
-      pageTracker._trackPageview();
-      } catch(err) {}
+        pageTracker._trackPageview();
+      } catch (err) {}
     </script>
   </body>
 </html>
