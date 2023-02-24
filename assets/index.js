@@ -90,6 +90,10 @@
     });
   }
 
+  function tmdbDetailsUrl(movie) {
+    return 'https://www.themoviedb.org/movie/' + movie.id;
+  }
+
   function processMovies(movies) {
     for (var i = 0; i < movies.length; i++) {
       var movie = movies[i];
@@ -98,7 +102,7 @@
         var eventInfo = {
           title: movie.title,
           start: releaseDate,
-          description: "Movie release date made using https://ubershmekel.github.io/movie2cal/",
+          description: "Movie release event made using https://ubershmekel.github.io/movie2cal/\nMore movie details at: " + tmdbDetailsUrl(movie),
           allday: true,
         };
         //movie.calendarLinks = addToCalendar({data:eventInfo}).innerHTML;
@@ -164,6 +168,7 @@
       },
       methods: {
         tmdbImageUrl: tmdbImageUrl,
+        tmdbDetailsUrl: tmdbDetailsUrl,
       },
     });
   }
